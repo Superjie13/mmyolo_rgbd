@@ -90,8 +90,8 @@ python path_to_multimodal_mmdeploy/tools/deploy_mm.py  \
   --dump-info  
 ```
 
-2.1. Deploy the part of the multimodal yolox
+3. Deploy the part of the multimodal yolox
 > If you want to deploy the part of the multimodal yolox, you can check the `partition_config` part in
 > configs/deploy/detection_onnxruntime_static_mm.py
 
-3. Deploy the multimodal yolox with TensorRT (TODO)
+4. Deploy the multimodal yolox with TensorRT (TODO)
