@@ -1,4 +1,14 @@
 # Copyright (c) OpenMMLab. All rights reserved.
+""" Modifications:
+Author: Sijie Hu
+Date: 20/03/2024
+Description: Add marks for yolox head (inherits from YOLOv5Head) to support partition export.
+specifically:
+    ln 98-108: mark the pred_maps for partition export (before decode output)
+    ln 172: mark the bboxes and scores for partition export (before nms)
+
+"""
+
 import copy
 from functools import partial
 from typing import List, Optional, Tuple
@@ -6,7 +16,7 @@ from typing import List, Optional, Tuple
 import torch
 from mmdeploy.codebase.mmdet import get_post_processing_params
 from mmdeploy.codebase.mmdet.models.layers import multiclass_nms
-from mmdeploy.core import FUNCTION_REWRITER
+from mmdeploy.core import FUNCTION_REWRITER, mark
 from mmengine.config import ConfigDict
 from mmengine.structures import InstanceData
 from torch import Tensor
@@ -85,6 +95,19 @@ def yolov5_head__predict_by_feat(self,
             represents the class label of the corresponding box.
     """
     ctx = FUNCTION_REWRITER.get_context()
+
+    # mark pred_maps
+    @mark('yolo_head', inputs=['cls_scores', 'bbox_preds', 'objectnesses'])
+    def __mark_pred_maps(cls_scores, bbox_preds, objectnesses):
+        return cls_scores, bbox_preds, objectnesses
+
+    @mark('yolo_head_raw', inputs=['cls_scores', 'bbox_preds'])
+    def __mark_pred_raw(cls_scores, bbox_preds):
+        return cls_scores, bbox_preds
+
+    cls_scores, bbox_preds, objectnesses = __mark_pred_maps(
+        cls_scores, bbox_preds, objectnesses)
+
     detector_type = type(self)
     deploy_cfg = ctx.cfg
     use_efficientnms = deploy_cfg.get('use_efficientnms', False)
@@ -144,6 +167,9 @@ def yolov5_head__predict_by_feat(self,
 
     bboxes = bbox_decoder(flatten_priors[None], flatten_bbox_preds,
                           flatten_stride)
+
+    # mark the bboxes and scores for partition export
+    scores, bboxes = __mark_pred_raw(scores, bboxes)
 
     if not with_nms:
         return bboxes, scores

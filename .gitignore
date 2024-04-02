@@ -119,6 +119,9 @@ output/
 work_dirs
 yolov5-6.1/
 
+work_dir*
+
+
 # Pytorch
 *.pth
 *.pt
