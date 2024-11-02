@@ -20,7 +20,7 @@ partition_config = dict(
             # The start node of the model, which is pre-defined in the model (mmyolo/deploy/models/detectors/yolo_detector_mm.py)
             start=['detector_forward:input'],
             # The end node of the model, which is pre-defined in the model (mmyolo/deploy/models/dense_heads/yolov5_head.py)
-            end=['yolo_head:input'],  # get scores and bboxes before nms
+            end=['yolo_head_raw:input'],  # get scores and bboxes before nms
             output_names=[f'pred_maps.{i}' for i in range(3)])
     ])
 codebase_config = dict(

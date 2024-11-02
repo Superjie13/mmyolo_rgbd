@@ -95,7 +95,7 @@ venv.bak/
 .spyderproject
 .spyproject
 
-# Rope project settings
+# Rope project settingsx
 .ropeproject
 
 # mkdocs documentation
@@ -103,8 +103,6 @@ venv.bak/
 
 # mypy
 .mypy_cache/
-data/
-data
 .vscode
 .idea
 .DS_Store
