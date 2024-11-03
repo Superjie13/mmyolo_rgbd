@@ -14,5 +14,4 @@ python3 ${MMDEPLOY_DIR}/tools/deploy_mm.py \
     --work-dir deploy_output \
     --device cpu \
     --log-level INFO \
-    --show \
     --dump-info
