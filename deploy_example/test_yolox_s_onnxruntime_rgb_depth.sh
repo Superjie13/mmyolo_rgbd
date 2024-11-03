@@ -11,7 +11,7 @@ python3 ${MMDEPLOY_DIR}/tools/deploy_mm.py \
     ${MODEL_CFG_PATH} \
     ${MODEL_CHECKPOINT_PATH} \
     "${WORKSPACE}/mmyolo_rgbd/data/rgb_00000.png, ${WORKSPACE}/mmyolo_rgbd/data/disp_00000.png" \
-    --work-dir deploy_output_2 \
+    --work-dir deploy_output \
     --device cpu \
     --log-level INFO \
     --show \
